@@ -180,24 +180,26 @@ namespace SyncIMEStatus
                     case ImeMode.DoNothing:
                         break;
                     case ImeMode.ImeOn:
+                        SyncIme.Current.ImeStat = true;
                         if (GetFocusedWindowImeStat(out bool ie1) && ie1 == true)
                         {
                             break;
                         }
                         else
                         {
-                            bool imeStat = SyncIme.Current.ImeStat = true;
+                            bool imeStat = true;
                             SetFocusedWindowImeStat(imeStat);
                             break;
                         }
                     case ImeMode.ImeOff:
+                        SyncIme.Current.ImeStat = false;
                         if (GetFocusedWindowImeStat(out bool ie2) && ie2 == false)
                         {
                             break;
                         }
                         else
                         {
-                            bool imeStat = SyncIme.Current.ImeStat = false;
+                            bool imeStat = false;
                             SetFocusedWindowImeStat(imeStat);
                             break;
                         }

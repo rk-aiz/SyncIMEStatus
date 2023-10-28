@@ -107,7 +107,12 @@ namespace SyncIMEStatus
         [DllImport("user32.dll", EntryPoint = "MapVirtualKeyA")]
         private extern static int MapVirtualKey(int wCode, int wMapType);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
 
+        public const uint EVENT_OBJECT_SELECTION = 0x8006;
+        public const uint EVENT_OBJECT_IME_HIDE = 0x8028;
+        public const uint EVENT_OBJECT_IME_SHOW = 0x8027;
         public const uint EVENT_OBJECT_FOCUS = 0x8005;
         public const uint WINEVENT_OUTOFCONTEXT = 0x0000;
         public const uint WINEVENT_SKIPOWNPROCESS = 0x0002;
@@ -208,7 +213,7 @@ namespace SyncIMEStatus
         public static IntPtr SetFocusEventHook(WinEventDelegate callback)
         {
             IntPtr id = IntPtr.Zero;
-            id = SetWinEventHook(EVENT_OBJECT_FOCUS, EVENT_OBJECT_FOCUS, IntPtr.Zero, callback, 0, 0, WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
+            id = SetWinEventHook(EVENT_OBJECT_FOCUS, EVENT_OBJECT_SELECTION, IntPtr.Zero, callback, 0, 0, WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
 
             Debug.Assert(id != IntPtr.Zero, "SetForegroundEventHook failed.");
             return id;

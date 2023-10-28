@@ -87,7 +87,7 @@ namespace SyncIMEStatus
             }
             else if (_workArea.Right < SystemParameters.PrimaryScreenWidth) // タスクバーが右側
             {
-                left = baseX - (int)Width - margin;
+                left = baseX - (int)Width - 50;
                 top = baseY - (int)Height;
             }
             else // タスクバーが下側

@@ -77,7 +77,6 @@
                     Canvas.Top="2"
                     Canvas.Left="22"
                     FontSize="16.5"
-                    FontWeight="ExtraBlack"
                     Foreground="{DynamicResource Caption}"
                     Text="Sync IME Status"/>
             <TextBlock

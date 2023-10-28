@@ -134,14 +134,19 @@ namespace SyncIMEStatus
 
         private void WinEventCallBack(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
+            //Debug.WriteLine($"eventType {eventType.ToString("X")}");
+            /*
             if (_lastHwndForeground == hwnd) { return; }
 
             if (!GetWindowImeStat(_lastHwndForeground, out bool imeStat)) { return; }
 
             _lastHwndForeground = hwnd;
 
-            SetWindowImeStat(hwnd, imeStat);
-            SetFocusedWindowImeStat(imeStat);
+            //Debug.WriteLine($"Last Window {hwnd} IME {imeStat}");
+            */
+            SetFocusedWindowImeStat(_imeStat);
+            SetWindowImeStat(hwnd, _imeStat);
+            SetWindowImeStat(GetForegroundWindow(), _imeStat);
         }
 
         private IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam)
