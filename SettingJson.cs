@@ -61,7 +61,7 @@ namespace SyncIMEStatus
             }
             else
             {
-                return Task.FromException(new FileNotFoundException());
+                return Task.CompletedTask;
             }
 
             Debug.WriteLine($"loading {loadPath}");

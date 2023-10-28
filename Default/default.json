@@ -1,20 +1,4 @@
 {
   "KeyCodeList": [
-    {
-      "KeyCode": 29,
-      "Modifiers": 0,
-      "ImeMode": 2,
-      "PassThroughMode": 1,
-      "ReplaceKey": 0,
-      "ReplaceModifiers": 0
-    },
-    {
-      "KeyCode": 28,
-      "Modifiers": 0,
-      "ImeMode": 1,
-      "PassThroughMode": 1,
-      "ReplaceKey": 0,
-      "ReplaceModifiers": 0
-    }
   ]
 }

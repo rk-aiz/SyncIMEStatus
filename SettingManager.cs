@@ -15,10 +15,6 @@ namespace SyncIMEStatus
 
             if (settings.KeyCodeList != null)
                 SyncIme.ResetHookKeys(settings.KeyCodeList);
-            /*
-            SyncIme.Current.HookKeys.Add(new HookKeyCode((int)Keys.IMENonconvert, KeyPassThroughMode.KeyUp, ImeMode.ImeOff));
-            SyncIme.Current.HookKeys.Add(new HookKeyCode((int)Keys.IMEConvert, KeyPassThroughMode.KeyUp, ImeMode.ImeOn));
-            */
         }
 
         public static void SeveSettings()
