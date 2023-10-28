@@ -1,0 +1,138 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SyncIMEStatus">
+
+    <SolidColorBrush x:Key="WindowBackground" Color="#F8F7F7F7" />
+    <SolidColorBrush x:Key="Canvas" Color="#F5F5F5" />
+
+    <Color x:Key="ForegroundColor">#404040</Color>
+    <Color x:Key="ForegroundMouseOverColor">#2D2D2D</Color>
+    <SolidColorBrush x:Key="Foreground" Color="{StaticResource ForegroundColor}" />
+    <SolidColorBrush x:Key="ForegroundMouseOver" Color="{StaticResource ForegroundMouseOverColor}" />
+    <Color x:Key="ForegroundSelectedColor">#177FE3</Color>
+    
+    <SolidColorBrush x:Key="Caption" Color="#0A0A0A" />
+    <SolidColorBrush x:Key="Border" Color="#DADADA"/>
+
+    <Color x:Key="ButtonBackgroundColor">#FBFBFB</Color>
+    <Color x:Key="ButtonMouseOverColor">#ECECEC</Color>
+    <Color x:Key="ButtonPressedColor">#E0E0E0</Color>
+    <SolidColorBrush x:Key="ButtonBackground" Color="{StaticResource ButtonBackgroundColor}"/>
+    <LinearGradientBrush x:Key="ButtonBorder"
+                         StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#E0E0E0" Offset="0.0" />
+        <GradientStop Color="#D0D0D0" Offset="0.95" />
+        <GradientStop Color="#D1D1D1" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="ToggleSliderBackground" Color="#DADADA" />
+    <Color x:Key="ToggleSliderBackgroundMouseOverColor">#C0C0C0</Color>
+    <Color x:Key="ToggleSliderBackgroundCheckedColor">#0099FF</Color>
+    <Color x:Key="ToggleSliderBackgroundCheckedMouseOverColor">#1A7EC0</Color>
+    
+    <SolidColorBrush x:Key="ToggleSliderBackgroundUnchecked" Color="#000099FF"/>
+    <SolidColorBrush x:Key="ToggleSliderBackgroundChecked" Color="#0099FF"/>
+
+    <SolidColorBrush x:Key="ToggleSliderBorder" Color="#999999" />
+    <SolidColorBrush x:Key="ToggleSliderEllipse" Color="#707070" />
+    <Color x:Key="ToggleSliderEllipseCheckedColor">#F0F0F0</Color>
+
+    <Color x:Key="PanelButtonMouseOverColor">#20AFAFAF</Color>
+    <Color x:Key="PanelButtonPressedColor">#40A0A0A0</Color>
+
+    <SolidColorBrush x:Key="SettingWindow" Color="#F3F3F3"/>
+    <SolidColorBrush x:Key="CustomKeysListPanelBackground" Color="#FAFAFA" />
+    <LinearGradientBrush x:Key="PanelBorder"
+                         StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#E5E5E5" Offset="0.0" />
+        <GradientStop Color="#E5E5E5" Offset="0.95" />
+        <GradientStop Color="#CBCBCB" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="KeySettingPanelBackground" Color="#FBFBFB"/>
+
+    <Color x:Key="CustomKeysListPanelBackgroundColor">#FAFAFA</Color>
+    <Color x:Key="CustomKeysListPanelBackgroundMouseOverColor">#EBEBEB</Color>
+    <Color x:Key="CustomKeysListPanelBackgroundSelectedColor">#E0E0E0</Color>
+
+    <Color x:Key="AddCustomKeyIconFillColor">#505050</Color>
+    <Color x:Key="AddCustomKeyIconFillMouseOverColor">#0099FF</Color>
+    <Color x:Key="AddCustomKeyBackgroundFocusedColor">#E5E7E8</Color>
+    <SolidColorBrush x:Key="AddCustomKeyBackgroundFocused" Color="{StaticResource AddCustomKeyBackgroundFocusedColor}"/>
+    <SolidColorBrush x:Key="AddCustomKeyForegroundFocused" Color="{StaticResource AddCustomKeyIconFillMouseOverColor}"/>
+    <Color x:Key="ComboBoxItemsBackgroundColor">#FAFAFA</Color>
+    <SolidColorBrush x:Key="ComboBoxItemsBackground" Color="{StaticResource ComboBoxItemsBackgroundColor}"/>
+    <LinearGradientBrush x:Key="ComboBoxItemsBorder"
+                         StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#E5E5E5" Offset="0.0" />
+        <GradientStop Color="#E5E5E5" Offset="0.95" />
+        <GradientStop Color="#CBCBCB" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <Color x:Key="ComboBoxTextDropDownOpenForegroundColor">#909090</Color>
+    <SolidColorBrush x:Key="ComboBoxTextDropDownOpenForeground" Color="{StaticResource ComboBoxTextDropDownOpenForegroundColor}"/>
+
+    <Color x:Key="ComboBoxItemBackgroundSelectedColor">#F0F0F0</Color>
+
+    <Color x:Key="ComboBoxItemForegroundMouseOverColor">#1AA3FF</Color>
+    
+    <Thickness x:Key="ButtonBorderThickness">
+        1, 1, 1, 1
+    </Thickness>
+
+    <Thickness x:Key="PanelBorderThickness">
+        1, 1, 1, 1
+    </Thickness>
+
+    <Thickness x:Key="ComboBoxItemsBorderThickness">
+        1, 1, 1, 1
+    </Thickness>
+
+    <Geometry x:Key="ChevronRight">
+        M 5.156, 1.853 L 10.642, 7.148 C 10.735, 7.241 10.781, 7.351 10.781, 7.478 10.781, 7.605 10.735, 7.715 10.642, 7.808 L 5.486, 12.964 C 5.393, 13.057 5.283, 13.103 5.156, 13.103 5.029, 13.103 4.919, 13.057 4.827, 12.964 4.734, 12.871 4.688, 12.761 4.688, 12.634 4.688, 12.507 4.734, 12.397 4.827, 12.305 L 9.646, 7.478 L 4.827, 2.651 C 4.734, 2.559 4.688, 2.449 4.688, 2.322 4.688, 2.195 4.734, 2.085 4.827, 1.992 4.919, 1.899 5.029, 1.853 5.156, 1.853 Z
+    </Geometry>
+
+    <Geometry x:Key="ChevronDown">
+        M 2.82, 3.743 C 2.942, 3.743 3.062, 3.768 3.179, 3.82 3.296, 3.871 3.396, 3.938 3.479, 4.021 L 7.5, 8.049 L 11.528, 4.021 C 11.714, 3.835 11.936, 3.743 12.195, 3.743 12.322, 3.743 12.441, 3.768 12.554, 3.82 12.666, 3.871 12.765, 3.939 12.85, 4.025 12.936, 4.11 13.004, 4.209 13.055, 4.321 13.107, 4.434 13.132, 4.553 13.132, 4.68 13.132, 4.939 13.04, 5.161 12.854, 5.347 L 8.167, 10.034 C 8.079, 10.122 7.977, 10.19 7.863, 10.239 7.748, 10.288 7.627, 10.313 7.5, 10.313 7.246, 10.313 7.026, 10.22 6.841, 10.034 L 2.153, 5.347 C 1.973, 5.166 1.882, 4.944 1.882, 4.68 1.882, 4.553 1.907, 4.432 1.956, 4.318 2.004, 4.203 2.072, 4.103 2.157, 4.017 2.242, 3.932 2.343, 3.865 2.457, 3.816 2.572, 3.767 2.693, 3.743 2.82, 3.743 Z
+    </Geometry>
+
+    <Geometry x:Key="AddIcon">
+        M 11.719, 1.562 C 11.93, 1.563 12.113, 1.64 12.268, 1.794 12.423, 1.949 12.5, 2.132 12.5, 2.344 L 12.5, 10.938 L 21.094, 10.938 C 21.305, 10.938 21.488, 11.015 21.643, 11.169 21.798, 11.324 21.875, 11.507 21.875, 11.719 21.875, 11.93 21.798, 12.113 21.643, 12.268 21.488, 12.423 21.305, 12.5 21.094, 12.5 L 12.5, 12.5 L 12.5, 21.094 C 12.5, 21.305 12.423, 21.488 12.268, 21.643 12.113, 21.798 11.93, 21.875 11.719, 21.875 11.507, 21.875 11.324, 21.798 11.169, 21.643 11.015, 21.488 10.938, 21.305 10.938, 21.094 L 10.938, 12.5 L 2.344, 12.5 C 2.132, 12.5 1.949, 12.423 1.794, 12.268 1.64, 12.113 1.563, 11.93 1.562, 11.719 1.563, 11.507 1.64, 11.324 1.794, 11.169 1.949, 11.015 2.132, 10.938 2.344, 10.938 L 10.938, 10.938 L 10.938, 2.344 C 10.938, 2.132 11.015, 1.949 11.169, 1.794 11.324, 1.64 11.507, 1.563 11.719, 1.562 Z
+    </Geometry>
+
+    <PathGeometry x:Key="KeyTopGeometry" Figures="M 34.6, 12 L 34.6, 12 C 34.6, 12 37.018, 15.13 38.625, 17.125 39.35, 18.025 39.291, 18.959 38.2, 19.6 31.95, 23.275 23.958, 27.94 23.958, 27.94 22.652, 28.705 20.486, 28.707 19.145, 27.944 19.145, 27.944 11.625, 23.825 5.119, 19.97 4.576, 19.648 3.336, 18.596 4.3, 17.325 5.95, 15.15 8.2, 12 8.2, 12 M21.222,4.442C21.885,4.441,22.551,4.586,23.061,4.875L33.718,10.935C34.737,11.514,34.76,12.464,33.768,13.045L23.396,19.122C22.404,19.704,20.758,19.705,19.739,19.125L9.081,13.066C8.062,12.487,8.04,11.537,9.032,10.956L19.404,4.878C19.9,4.588,20.559,4.442,21.222,4.442z"/>
+
+    <PathGeometry x:Key="ArrowGeometry" Figures="
+    M -13.125, -16.25 C -13.294, -16.25 -13.441, -16.188 -13.564, -16.064 -13.688, -15.941 -13.75, -15.794 -13.75, -15.625 L -13.75, -11.875 C -13.75, -11.706 -13.812, -11.559 -13.936, -11.436 -14.059, -11.312 -14.206, -11.25 -14.375, -11.25 L -16.318, -11.25 C -16.514, -11.25 -16.683, -11.178 -16.826, -11.035 -16.969, -10.892 -17.041, -10.723 -17.041, -10.527 -17.041, -10.443 -17.026, -10.363 -16.997, -10.288 -16.968, -10.213 -16.927, -10.143 -16.875, -10.078 L -10, -1.611 L -3.125, -10.078 C -3.073, -10.143 -3.032, -10.213 -3.003, -10.288 -2.974, -10.363 -2.959, -10.443 -2.959, -10.527 -2.959, -10.723 -3.031, -10.892 -3.174, -11.035 -3.317, -11.178 -3.486, -11.25 -3.682, -11.25 L -5.625, -11.25 C -5.794, -11.25 -5.941, -11.312 -6.064, -11.436 -6.188, -11.559 -6.25, -11.706 -6.25, -11.875 L -6.25, -15.625 C -6.25, -15.794 -6.312, -15.941 -6.436, -16.064 -6.559, -16.188 -6.706, -16.25 -6.875, -16.25 L -13.125, -16.25 Z
+    "/>
+
+    <LinearGradientBrush x:Key="CheckBoxBorder"
+                         StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#B5B5B5" Offset="0.0" />
+        <GradientStop Color="#B5B5B5" Offset="0.95" />
+        <GradientStop Color="#8B8B8B" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <Thickness x:Key="CheckBoxBorderThickness">
+        1, 1, 1, 1
+    </Thickness>
+
+    <Color x:Key="CheckBoxBorderBackgroundColor">#EFEFEF</Color>
+    <SolidColorBrush x:Key="CheckBoxBorderBackground" Color="{StaticResource CheckBoxBorderBackgroundColor}"/>
+    <Color x:Key="CheckBoxBorderBackgroundMouseOverColor">#E0E0E0</Color>
+    <SolidColorBrush x:Key="CheckBoxBorderBackgroundMouseOver" Color="{StaticResource CheckBoxBorderBackgroundMouseOverColor}"/>
+
+    <Color x:Key="CheckBoxBorderBackgroundCheckedColor">#177FE3</Color>
+    <SolidColorBrush x:Key="CheckBoxBorderBackgroundChecked" Color="{StaticResource CheckBoxBorderBackgroundCheckedColor}"/>
+    <Color x:Key="CheckBoxBorderBackgroundCheckedMouseOverColor">#1572CC</Color>
+    <SolidColorBrush x:Key="CheckBoxBorderBackgroundCheckedMouseOver" Color="{StaticResource CheckBoxBorderBackgroundCheckedMouseOverColor}"/>
+
+    <PathGeometry x:Key="CheckGeometry" Figures="
+        M 13.125, 7.5 C 13.294, 7.5 13.441, 7.562 13.564, 7.686 13.688, 7.809 13.75, 7.956 13.75, 8.125 13.75, 8.294 13.688, 8.441 13.564, 8.564 L 8.564, 13.564 C 8.441, 13.688 8.294, 13.75 8.125, 13.75 7.956, 13.75 7.809, 13.688 7.686, 13.564 L 5.186, 11.064 C 5.062, 10.941 5, 10.794 5, 10.625 5, 10.456 5.062, 10.309 5.186, 10.186 5.309, 10.062 5.456, 10 5.625, 10 5.794, 10 5.941, 10.062 6.064, 10.186 L 8.125, 12.236 L 12.686, 7.686 Z
+    "/>
+    <Color x:Key="CheckMarkColor">#F5F5F5</Color>
+    <SolidColorBrush x:Key="CheckMark" Color="{StaticResource CheckMarkColor}"/>
+
+
+
+</ResourceDictionary>

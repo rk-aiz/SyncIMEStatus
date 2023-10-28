@@ -1,0 +1,75 @@
+﻿<Popup x:Class="SyncIMEStatus.CustomPopup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:SyncIMEStatus"
+    AllowsTransparency="True"
+    PopupAnimation="Fade"
+    Placement="MousePoint"
+    StaysOpen="False"
+    Width="250" Height="150">
+    <Popup.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+                <Setter Property="Width" Value="90"/>
+                <Setter Property="Height" Value="26"/>
+                <Setter Property="Canvas.Top" Value="6"/>
+                <Setter Property="Canvas.Left" Value="130"/>
+            </Style>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+                <Setter Property="FontSize" Value="13" />
+            </Style>
+        </ResourceDictionary>
+    </Popup.Resources>
+    <Grid Width="250" Height="150"
+          Background="{DynamicResource WindowBackground}"
+          Loaded="CustomPopup_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="68"/>
+            <RowDefinition Height="42"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+
+        <Canvas Grid.Row="0">
+            <TextBlock
+                    Canvas.Top="5"
+                    Canvas.Left="15"
+                    FontSize="18"
+                    FontWeight="ExtraBlack"
+                    Foreground="{DynamicResource Caption}"
+                    Text="Custom Popup"/>
+            <TextBlock
+                    Canvas.Top="32"
+                    Canvas.Left="15"
+                    FontSize="11"
+                    Width="130"
+                    TextWrapping="Wrap"
+                    Text="アプリ間でIMEのON/OFFを同期します"/>
+        </Canvas>
+        <Canvas Grid.Row="1">
+            <TextBlock
+                    Canvas.Left="15"
+                    Canvas.Top="10"
+                    Text="IME切り替えキー設定"/>
+            <Button
+                    x:Name="OpenSettingButton"
+                    Command="{Binding OpenSettingCommand}"
+                    Content="Customize"/>
+        </Canvas>
+
+        <Canvas Grid.Row="2">
+            <Button
+                    x:Name="ExitButton"
+                    Command="{Binding ExitCommand}"
+                    Content="Exit"/>
+        </Canvas>
+    </Grid>
+</Popup>

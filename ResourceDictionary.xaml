@@ -1,0 +1,1122 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+                    xmlns:local="clr-namespace:SyncIMEStatus"
+                    xmlns:helpers="clr-namespace:SyncIMEStatus.Helpers">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ThemeDictionary.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="SpecificSettingsPanelStyle" TargetType="{x:Type GroupBox}" BasedOn="{StaticResource {x:Type GroupBox}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GroupBox}">
+                    <Grid x:Name="Grid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0"
+                            BorderThickness="1"
+                            CornerRadius="2,2,0,0">
+                            <ContentPresenter Margin="4"
+                              ContentSource="Header"
+                              RecognizesAccessKey="True" />
+                        </Border>
+                        <Border Grid.Row="1"
+                            BorderThickness="1,0,1,1"
+                            CornerRadius="0,0,2,2">
+                            <ContentPresenter Margin="4" />
+                        </Border>
+                        <Grid.RenderTransform>
+                            <TranslateTransform X="0" Y="0"/>
+                        </Grid.RenderTransform>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Visibility" Value="Visible">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Grid"
+                                            Storyboard.TargetProperty="(Grid.RenderTransform).(TranslateTransform.Y)"
+                                            From="150" To="0" Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="SetReplaceKeyTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                    <Grid x:Name="Grid">
+                        <Border
+                            x:Name="Border"
+                            Style="{DynamicResource KeySettingPanelStyle}">
+                            <DockPanel>
+                                <TextBlock
+                                    Margin="20"
+                                    DockPanel.Dock="Left"
+                                    TextAlignment="Left"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    Text="Alternative Input Key"/>
+                                <TextBlock
+                                    Margin="20, 20, 50, 20"
+                                    DockPanel.Dock="Right"
+                                    TextAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </DockPanel>
+                        </Border>
+                        <Border
+                            x:Name="BlueLayer"
+                            Opacity="0"
+                            Background="{DynamicResource AddCustomKeyBackgroundFocused}"
+                            Style="{DynamicResource KeySettingPanelStyle}">
+                            <DockPanel>
+                                <Path x:Name="KeyTopIcon"
+                                    DockPanel.Dock="Left"
+                                    Stroke="{DynamicResource AddCustomKeyForegroundFocused}"
+                                    StrokeThickness="2.0"
+                                    Data="{DynamicResource KeyTopGeometry}">
+                                    <Path.RenderTransform>
+                                        <MatrixTransform Matrix="0.75, 0, 0, 0.75, 0, 20"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Path x:Name="PushKeyIcon"
+                                    DockPanel.Dock="Left"
+                                    Stroke="{DynamicResource AddCustomKeyForegroundFocused}"
+                                    Fill="{DynamicResource AddCustomKeyBackgroundFocused}"
+                                    StrokeThickness="1.5"
+                                    Data="{DynamicResource ArrowGeometry}">
+                                    <Path.RenderTransform>
+                                        <MatrixTransform Matrix="0.85, 0, 0, 0.9, -1.5, 25"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <TextBlock
+                                    DockPanel.Dock="Right"
+                                    Width="180"
+                                    TextAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource AddCustomKeyForegroundFocused}"
+                                    Text="Enter the key to input instead."/>
+                            </DockPanel>
+                        </Border>
+                        <Grid.RenderTransform>
+                            <TranslateTransform X="0" Y="0"/>
+                        </Grid.RenderTransform>
+                        <!--<ScrollViewer Margin="0"
+                            x:Name="PART_ContentHost" />-->
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition To="MouseOver" GeneratedDuration="0:0:0.2"/>
+                                    <VisualTransition To="Normal" GeneratedDuration="0:0:1"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                            To="{StaticResource CustomKeysListPanelBackgroundMouseOverColor}"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="GotFocus">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="1" Duration="0:0:0.2" 
+                                        Storyboard.TargetName="BlueLayer"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                    <DoubleAnimation To="0" Duration="0:0:0.2"
+                                        Storyboard.TargetName="Border"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                    <helpers:MatrixAnimation From="0.75, 0, 0, 0.75, 30, 22" To="0.70, 0, 0, 0.70, 31, 26" Duration="0:0:0.7" 
+                                        Storyboard.TargetName="KeyTopIcon"
+                                        Storyboard.TargetProperty="(Path.RenderTransform).(MatrixTransform.Matrix)"
+                                        RepeatBehavior="Forever" AutoReverse="True">
+                                        <helpers:MatrixAnimation.EasingFunction>
+                                            <ElasticEase Oscillations="2" EasingMode="EaseInOut"/>
+                                        </helpers:MatrixAnimation.EasingFunction>
+                                    </helpers:MatrixAnimation>
+                                    <helpers:MatrixAnimation From="0.85, 0, 0, 0.9, 14.5, 27" To="0.85, 0, 0, 0.7, 14.5, 34" Duration="0:0:0.7" 
+                                        Storyboard.TargetName="PushKeyIcon"
+                                        Storyboard.TargetProperty="(Path.RenderTransform).(MatrixTransform.Matrix)"
+                                        RepeatBehavior="Forever" AutoReverse="True">
+                                        <helpers:MatrixAnimation.EasingFunction>
+                                            <QuadraticEase EasingMode="EaseInOut"/>
+                                        </helpers:MatrixAnimation.EasingFunction>
+                                    </helpers:MatrixAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="LostFocus">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="0" Duration="0:0:0.2" 
+                                        Storyboard.TargetName="BlueLayer"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                    <DoubleAnimation To="1" Duration="0:0:0.2" 
+                                        Storyboard.TargetName="Border"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid
+                        TextElement.FontSize="13"
+                        Width="60">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="17"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Border
+                            x:Name="LowerBorder"
+                            Width="17"
+                            CornerRadius="4"
+                            Opacity="1"
+                            Background="{DynamicResource CheckBoxBorderBackground}"
+                            BorderThickness="{DynamicResource ButtonBorderThickness}"
+                            BorderBrush="{DynamicResource CheckBoxBorder}"/>
+                        <Border
+                            x:Name="HigherBorder"
+                            Width="17"
+                            CornerRadius="4"
+                            Opacity="0"
+                            Background="{DynamicResource CheckBoxBorderBackgroundChecked}"/>
+                        <Path
+                            x:Name="CheckMarkPath"
+                            Width="13"
+                            Height="10"
+                            Stretch="Fill"
+                            Fill="{DynamicResource CheckMark}"
+                            Data="{DynamicResource CheckGeometry}">
+                            <Path.Clip>
+                                <RectangleGeometry x:Name="CheckMarkCliping" Rect="0, 0, 0, 10"/>
+                            </Path.Clip>
+                        </Path>
+                        <ContentPresenter
+                            Grid.Row="1"
+                            Margin="0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"/>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition To="MouseOver" GeneratedDuration="0:0:0.2"/>
+                                    <VisualTransition From="MouseOver" GeneratedDuration="0:0:0.2"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="LowerBorder"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                            To="{StaticResource CheckBoxBorderBackgroundMouseOverColor}"/>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HigherBorder"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                            To="{StaticResource CheckBoxBorderBackgroundCheckedMouseOverColor}"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                </VisualState>
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition To="Checked" GeneratedDuration="0:0:0.2"/>
+                                    <VisualTransition From="Checked" GeneratedDuration="0:0:0.2"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="HigherBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"/>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="LowerBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"/>
+                                        <RectAnimationUsingKeyFrames Duration="0:0:0.2"
+                                             Storyboard.TargetName="CheckMarkCliping"
+                                             Storyboard.TargetProperty="Rect">
+                                            <EasingRectKeyFrame KeyTime="0:0:0.2" Value="0, 0, 13, 10">
+                                            </EasingRectKeyFrame>
+                                        </RectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked" />
+                                <VisualState x:Name="Indeterminate">
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="AddCustomKeyTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                    <Grid x:Name="Grid">
+                        <Border
+                            x:Name="Border"
+                            Style="{DynamicResource KeySettingPanelStyle}">
+                            <Path
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Name="Add"
+                                Fill="{DynamicResource Foreground}"
+                                Data="{StaticResource AddIcon}"/>
+                        </Border>
+                        <Border
+                            x:Name="BlueLayer"
+                            Opacity="0"
+                            Background="{DynamicResource AddCustomKeyBackgroundFocused}"
+                            Style="{DynamicResource KeySettingPanelStyle}">
+                            <DockPanel>
+                                <Path x:Name="KeyTopIcon"
+                                    DockPanel.Dock="Left"
+                                    Stroke="{DynamicResource AddCustomKeyForegroundFocused}"
+                                    StrokeThickness="2.0"
+                                    Data="{DynamicResource KeyTopGeometry}">
+                                    <Path.RenderTransform>
+                                        <MatrixTransform Matrix="0.75, 0, 0, 0.75, 7, 20"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Path x:Name="PushKeyIcon"
+                                    DockPanel.Dock="Left"
+                                    Stroke="{DynamicResource AddCustomKeyForegroundFocused}"
+                                    Fill="{DynamicResource AddCustomKeyBackgroundFocused}"
+                                    StrokeThickness="1.5"
+                                    Data="{DynamicResource ArrowGeometry}">
+                                    <Path.RenderTransform>
+                                        <MatrixTransform Matrix="0.85, 0, 0, 0.9, -8.5, 25"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <TextBlock
+                                    DockPanel.Dock="Right"
+                                    Width="180"
+                                    TextAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource AddCustomKeyForegroundFocused}"
+                                    Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </DockPanel>
+                        </Border>
+                        <Grid.RenderTransform>
+                            <TranslateTransform X="0" Y="0"/>
+                        </Grid.RenderTransform>
+                        <!--<ScrollViewer Margin="0"
+                            x:Name="PART_ContentHost" />-->
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition To="MouseOver" GeneratedDuration="0:0:0.2"/>
+                                    <VisualTransition To="Normal" GeneratedDuration="0:0:1"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                            To="{StaticResource CustomKeysListPanelBackgroundMouseOverColor}"/>
+                                        <ColorAnimation Storyboard.TargetName="Add"
+                                            Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)"
+                                            To="{StaticResource AddCustomKeyIconFillMouseOverColor}"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5" 
+                                        Storyboard.TargetName="Grid"
+                                        Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.Y)">
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.15" Value="-12">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <BounceEase Bounces="3" EasingMode="EaseOut" Bounciness="1.8" />
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="GotFocus">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="1" Duration="0:0:0.2" 
+                                        Storyboard.TargetName="BlueLayer"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                    <DoubleAnimation To="0" Duration="0:0:0.2"
+                                        Storyboard.TargetName="Border"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                    <helpers:MatrixAnimation From="0.75, 0, 0, 0.75, 7, 20" To="0.70, 0, 0, 0.70, 8, 24" Duration="0:0:0.7" 
+                                        Storyboard.TargetName="KeyTopIcon"
+                                        Storyboard.TargetProperty="(Path.RenderTransform).(MatrixTransform.Matrix)"
+                                        RepeatBehavior="Forever" AutoReverse="True">
+                                        <helpers:MatrixAnimation.EasingFunction>
+                                            <ElasticEase Oscillations="2" EasingMode="EaseInOut"/>
+                                        </helpers:MatrixAnimation.EasingFunction>
+                                    </helpers:MatrixAnimation>
+                                    <helpers:MatrixAnimation From="0.85, 0, 0, 0.9, -8.5, 25" To="0.85, 0, 0, 0.7, -8.5, 32" Duration="0:0:0.7" 
+                                        Storyboard.TargetName="PushKeyIcon"
+                                        Storyboard.TargetProperty="(Path.RenderTransform).(MatrixTransform.Matrix)"
+                                        RepeatBehavior="Forever" AutoReverse="True">
+                                        <helpers:MatrixAnimation.EasingFunction>
+                                            <QuadraticEase EasingMode="EaseInOut"/>
+                                        </helpers:MatrixAnimation.EasingFunction>
+                                    </helpers:MatrixAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="LostFocus">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="0" Duration="0:0:0.2" 
+                                        Storyboard.TargetName="BlueLayer"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                    <DoubleAnimation To="1" Duration="0:0:0.2" 
+                                        Storyboard.TargetName="Border"
+                                        Storyboard.TargetProperty="Opacity"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <ControlTemplate x:Key="KeySettingComboBoxToggleButtonTemplate" TargetType="ToggleButton">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="25" />
+            </Grid.ColumnDefinitions>
+            <Border
+                Name="Border" 
+                BorderBrush="{DynamicResource ButtonBorder}" 
+                CornerRadius="3" 
+                BorderThickness="{DynamicResource ButtonBorderThickness}"
+                Background="{TemplateBinding Background}"
+                Grid.ColumnSpan="2" />
+            <Path          
+                Data="{DynamicResource ChevronDown}"
+                HorizontalAlignment="Center"
+                Fill="{DynamicResource ToggleSliderEllipse}"
+                Name="Arrow"
+                VerticalAlignment="Center"
+                Width="15"
+                Grid.Column="1">
+                <Path.RenderTransform>
+                    <RotateTransform CenterX="8" CenterY="7" Angle="0"/>
+                </Path.RenderTransform>
+            </Path>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="MouseOver">
+                    </VisualState>
+                    <VisualState x:Name="Pressed"/>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="CheckStates">
+                    <VisualState x:Name="Checked">
+                        <Storyboard>
+                            <DoubleAnimation To="180" Duration="0:0:0.2" 
+                                Storyboard.TargetName="Arrow"
+                                Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)">
+                                <DoubleAnimation.EasingFunction>
+                                    <SineEase EasingMode="EaseOut"/>
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Unchecked">
+                        <Storyboard>
+                            <DoubleAnimation To="0" Duration="0:0:0.2" 
+                                Storyboard.TargetName="Arrow"
+                                Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)">
+                                <DoubleAnimation.EasingFunction>
+                                    <SineEase EasingMode="EaseOut"/>
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter Property="TextBlock.Foreground" Value="#C0C0C0"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate TargetType="TextBox" x:Key="ComboBoxTextBoxTemplate">
+        <Border
+            Name="PART_ContentHost" Background="Transparent"
+            Focusable="False"/>
+    </ControlTemplate>
+
+    <Style x:Key="KeySettingComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Border
+                        Name="Border"
+                        CornerRadius="3"
+                        Background="Transparent"
+                        TextElement.Foreground="{DynamicResource Foreground}"
+                        Padding="3">
+                        <ContentPresenter
+                            ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                            Content="{TemplateBinding ContentControl.Content}"/>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="SelectionStates">
+                                <VisualState x:Name="Unselected"/>
+                                <VisualState x:Name="Selected">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                                Value="{StaticResource ComboBoxItemBackgroundSelectedColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="SelectedUnfocused"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                                Value="{StaticResource ComboBoxItemForegroundMouseOverColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="KeySettingComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource KeySettingComboBoxItemStyle}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <ToggleButton
+                            ClickMode="Press"
+                            Name="ToggleButton"
+                            IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                            Focusable="False"
+                            Background="{DynamicResource ButtonBackground}"
+                            Template="{StaticResource KeySettingComboBoxToggleButtonTemplate}"/>
+                        <ContentPresenter
+                            Name="ContentSite"
+                            Margin="10,3,23,3"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
+                            Content="{helpers:CultureAwareBinding Path=SelectedValue, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsHitTestVisible="False" />
+                        <TextBox
+                            Margin="3,1,1,1"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Left"
+                            Name="PART_EditableTextBox"
+                            Background="Transparent"
+                            VerticalAlignment="Center"
+                            IsReadOnly="False"
+                            Focusable="False"
+                            xml:space="preserve"                            
+                            Template="{StaticResource ComboBoxTextBoxTemplate}"/>
+                        <Popup
+                            Placement="Bottom"
+                            Name="Popup"
+                            Focusable="False"
+                            AllowsTransparency="True"
+                            IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
+                            PopupAnimation="Fade">
+                            <Grid
+                                MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
+                                MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}"
+                                Name="DropDown">
+                                <Border
+                                    Padding="5"
+                                    CornerRadius="5"
+                                    Background="{DynamicResource ComboBoxItemsBackground}"
+                                    BorderThickness="{DynamicResource ComboBoxItemsBorderThickness}"
+                                    BorderBrush="{DynamicResource ComboBoxItemsBorder}"
+                                    Name="DropDownBorder"/>
+                                <ScrollViewer Padding="5">
+                                    <ItemsPresenter
+                                        KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="ToggleButton"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                                Value="{StaticResource ButtonBackgroundColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="ToggleButton"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                                Value="{StaticResource ButtonMouseOverColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ItemsControl.HasItems" Value="False">
+                            <Setter Property="FrameworkElement.MinHeight" TargetName="DropDownBorder" Value="80"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="TextElement.Foreground" Value="{StaticResource Foreground}"/>
+                        </Trigger>
+                        <Trigger Property="ComboBox.IsDropDownOpen" Value="True">
+                            <Setter TargetName="ContentSite" Property="TextElement.Foreground" Value="{DynamicResource ComboBoxTextDropDownOpenForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="KeySettingPanelStyle" TargetType="{x:Type Border}">
+        <Setter Property="Margin" Value="4, 2"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource PanelBorderThickness}"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Background" Value="{DynamicResource KeySettingPanelBackground}"/>
+    </Style>
+
+    <DataTemplate x:Key="CustomKeyListTemplate">
+        <Border
+            Name="border"
+            Width="250" Height="60"
+            Margin="2, 2, 20, 2"
+            CornerRadius="5"
+            BorderBrush="{DynamicResource PanelBorder}"
+            BorderThickness="{DynamicResource PanelBorderThickness}"
+            Background="{DynamicResource CustomKeysListPanelBackground}">
+            <Grid
+                Name="grid"
+                Margin="20, 0, 0, 0"
+                Background="Transparent"
+                VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <TextBlock
+                    FontSize="18"
+                    Text="{helpers:CultureAwareBinding Path=KeyCode,
+                        Converter={x:Static helpers:IntToEnumConverter.I},
+                        ConverterParameter={x:Type forms:Keys}}"/>
+                <StackPanel
+                    Orientation="Horizontal"
+                    Grid.Row="1">
+                    <TextBlock
+                        Margin="0, 0, 10, 0"
+                        Text="{helpers:CultureAwareBinding Path=ImeMode}"/>
+                    <TextBlock Text="{helpers:CultureAwareBinding Path=PassThroughMode}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <DataTemplate.Triggers>
+            <EventTrigger RoutedEvent="MouseEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimationUsingKeyFrames
+                            Storyboard.TargetName="border"
+                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
+                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                            Value="{StaticResource CustomKeysListPanelBackgroundMouseOverColor}"/>
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="MouseLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimationUsingKeyFrames
+                            Storyboard.TargetName="border"
+                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
+                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                            Value="{StaticResource CustomKeysListPanelBackgroundColor}"/>
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}"
+                        Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames
+                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                    Value="{StaticResource ForegroundSelectedColor}"/>
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <Storyboard>
+                                <ColorAnimationUsingKeyFrames
+                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)">
+                                    <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                        Value="{StaticResource ForegroundColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <Style x:Key="CustomKeysListBoxContainerStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContentControl}">
+                    <Grid>
+                        <ContentPresenter />
+                        <Path
+                            x:Name="MarkerPath"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Fill="#008AE5">
+                            <Path.Data>
+                                <PathGeometry x:Name="MarkerPathGeometry">
+                                    <PathGeometry.Figures>
+                                        <PathFigureCollection>
+                                            <PathFigure IsClosed="True" StartPoint="0, 5">
+                                                <PathFigure.Segments>
+                                                    <PathSegmentCollection>
+                                                        <ArcSegment
+                                                            x:Name="arc1"
+                                                            Point="5, 5" SweepDirection="Clockwise" IsLargeArc="True" Size="2.5, 2.5" RotationAngle="180"/>
+                                                        <LineSegment
+                                                            x:Name="line1"
+                                                            Point="5, 25"/>
+                                                        <ArcSegment
+                                                            x:Name="arc2"
+                                                            Point="0, 25" SweepDirection="Clockwise" IsLargeArc="True" Size="2.5, 2.5" RotationAngle="180"/>
+                                                    </PathSegmentCollection>
+                                                </PathFigure.Segments>
+                                            </PathFigure>
+                                        </PathFigureCollection>
+                                    </PathGeometry.Figures>
+                                    <PathGeometry.Transform>
+                                        <MatrixTransform Matrix="1, 0, 0, 1, 0, 0"/>
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                            <Path.RenderTransform>
+                                <TranslateTransform X="10" Y="17"/>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ListBoxItem.IsSelected" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <helpers:MatrixAnimation
+                                            Duration="0:0:0.3"
+                                            Storyboard.TargetName="MarkerPathGeometry"
+                                            Storyboard.TargetProperty="(PathGeometry.Transform).(MatrixTransform.Matrix)"
+                                            From="1, 0, 0, 1.5, 0, -7"
+                                            To="1, 0, 0, 1, 0, 0"/>
+                                        <DoubleAnimation
+                                            Duration="0:0:0.3"
+                                            Storyboard.TargetName="MarkerPath"
+                                            Storyboard.TargetProperty="Opacity"
+                                            From="0"
+                                            To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Duration="0:0:0.3"
+                                            Storyboard.TargetName="MarkerPath"
+                                            Storyboard.TargetProperty="Opacity"
+                                            From="1"
+                                            To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}, Delay=300}"
+                                     Value="False">
+                            <Setter TargetName="MarkerPath" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="TextBlock.Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Name="border"
+                            CornerRadius="5"
+                            BorderThickness="{DynamicResource ButtonBorderThickness}"
+                            BorderBrush="{DynamicResource ButtonBorder}"
+                            Background="{DynamicResource ButtonBackground}">
+                        <ContentPresenter
+                            VerticalAlignment="Center"
+                            TextBlock.TextAlignment="Center"/>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                            Value="{StaticResource ButtonBackgroundColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                            Value="{StaticResource ButtonMouseOverColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.05"
+                                                Value="{StaticResource ButtonPressedColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsMouseCaptured" Value="True" />
+                            </MultiTrigger.Conditions>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type ToggleButton}" x:Key="ToggleSlider">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <helpers:MatrixAnimation
+                                            Storyboard.TargetName="ThumbPath"
+                                            Storyboard.TargetProperty="(PathGeometry.Transform).(MatrixTransform.Matrix)"
+                                            To="1, 0, 0, 1, -7, 0"
+                                            Duration="0:0:0.2">
+                                            <helpers:MatrixAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </helpers:MatrixAnimation.EasingFunction>
+                                        </helpers:MatrixAnimation>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="WhiteLayer"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                            Value="{StaticResource ToggleSliderBackgroundMouseOverColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="BlueLayer"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                            Value="{StaticResource ToggleSliderBackgroundCheckedMouseOverColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                        <helpers:MatrixAnimation
+                                                Storyboard.TargetName="ThumbPath"
+                                                Storyboard.TargetProperty="(PathGeometry.Transform).(MatrixTransform.Matrix)"
+                                                To="1.12 0, 0, 1.12, -8, 0"
+                                                Duration="0:0:0.2">
+                                            <helpers:MatrixAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </helpers:MatrixAnimation.EasingFunction>
+                                        </helpers:MatrixAnimation>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed" />
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                                Storyboard.TargetName="Thumb"
+                                                Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                                Value="{StaticResource ToggleSliderEllipseCheckedColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimation To="0" Duration="0:0:0.2" 
+                                             Storyboard.TargetName="Border" 
+                                             Storyboard.TargetProperty="Opacity">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation To="39" Duration="0:0:0.2" 
+                                             Storyboard.TargetName="Thumb" 
+                                             Storyboard.TargetProperty="(Path.RenderTransform).(TranslateTransform.X)">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation To="1" Duration="0:0:0.2" 
+                                             Storyboard.TargetName="BlueLayer" 
+                                             Storyboard.TargetProperty="Opacity">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation To="12.2" Duration="0:0:0.2" 
+                                             Storyboard.TargetName="Thumb" 
+                                             Storyboard.TargetProperty="(Path.RenderTransform).(TranslateTransform.X)">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation To="0" Duration="0:0:0.2" 
+                                             Storyboard.TargetName="BlueLayer" 
+                                             Storyboard.TargetProperty="Opacity">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Border Grid.Row="1" Grid.Column="0"
+                                HorizontalAlignment="Stretch">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"/>
+                        </Border>
+                        <Grid Height="22">
+                            <Border x:Name="WhiteLayer"
+                                CornerRadius="11"
+                                Margin="1"
+                                Background="{StaticResource ToggleSliderBackground}"/>
+                            <Border x:Name="BlueLayer"
+                                CornerRadius="11"
+                                Margin="1"
+                                Opacity="0"
+                                Background="{StaticResource ToggleSliderBackgroundChecked}"/>
+                            <Border x:Name="Border"
+                                CornerRadius="11"
+                                BorderThickness="2"
+                                BorderBrush="{StaticResource ToggleSliderBorder}"/>
+                        </Grid>
+                        <Path x:Name="Thumb"
+                                Fill="{StaticResource ToggleSliderEllipse}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Stretch">
+                            <Path.Data>
+                                <PathGeometry x:Name="ThumbPath">
+                                    <PathGeometry.Figures>
+                                        <PathFigureCollection>
+                                            <PathFigure IsClosed="True" StartPoint="7, 0">
+                                                <PathFigure.Segments>
+                                                    <PathSegmentCollection>
+                                                        <ArcSegment Point="7, 14" SweepDirection="Clockwise" IsLargeArc="True" Size="7, 7" RotationAngle="180"/>
+                                                        <ArcSegment Point="7, 0" SweepDirection="Clockwise" IsLargeArc="True" Size="7, 7" RotationAngle="180"/>
+                                                    </PathSegmentCollection>
+                                                </PathFigure.Segments>
+                                            </PathFigure>
+                                        </PathFigureCollection>
+                                    </PathGeometry.Figures>
+                                    <PathGeometry.Transform>
+                                        <MatrixTransform Matrix="1, 0, 0, 1, -7, 0"/>
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                            <Path.RenderTransform>
+                                <TranslateTransform X="12.2" Y="0"/>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PanelButton" TargetType="{x:Type Button}">
+        <Setter Property="TextBlock.Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Name="Canvas"
+                            Background="Transparent">
+                        <ContentPresenter/>
+                        <Path
+                            Width="20" Height="25"
+                            Canvas.Right="10"
+                            Canvas.Top="15"
+                            Fill="{DynamicResource Foreground}"
+                            Data="{StaticResource ChevronRight}"/>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="Canvas"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                                Value="Transparent"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="Canvas"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.2"
+                                                Value="{StaticResource PanelButtonMouseOverColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames
+                                            Storyboard.TargetName="Canvas"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.05"
+                                                Value="{StaticResource PanelButtonPressedColor}"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
