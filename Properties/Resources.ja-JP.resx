@@ -142,9 +142,6 @@
   <data name="strImeOnAndSend" xml:space="preserve">
     <value>IMEオン(SendMessage)</value>
   </data>
-  <data name="strImeToggleAndSend" xml:space="preserve">
-    <value>切り替え(SendMessage)</value>
-  </data>
   <data name="strKeyDown" xml:space="preserve">
     <value>KeyDownに反応する</value>
   </data>
@@ -171,5 +168,8 @@
   </data>
   <data name="strToggle" xml:space="preserve">
     <value>切り替え</value>
+  </data>
+  <data name="strToggleAndSend" xml:space="preserve">
+    <value>切り替え(SendMessage)</value>
   </data>
 </root>

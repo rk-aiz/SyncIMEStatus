@@ -42,7 +42,7 @@ namespace SyncIMEStatus
         ImeOffAndSend,
         [Helpers.LocalizedDescription("strToggle")]
         Toggle,
-        [Helpers.LocalizedDescription("strImeOffAndSend")]
+        [Helpers.LocalizedDescription("strToggleAndSend")]
         ToggleAndSend,
     }
 
