@@ -207,7 +207,7 @@
                         <TextBlock
                             Canvas.Left="20"
                             Canvas.Top="18"
-                            Text="State of the trigger key"/>
+                            Text="Trigger state"/>
                     </Canvas>
                 </Border>
                 <Border

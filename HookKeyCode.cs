@@ -14,14 +14,14 @@ namespace SyncIMEStatus
     [TypeConverter(typeof(Helpers.EnumDescriptionTypeConverter))]
     public enum KeyPassThroughMode
     {
-        [Helpers.LocalizedDescription("strNone")]
-        None,
+        [Helpers.LocalizedDescription("strThroughBoth")]
+        Both,
         [Helpers.LocalizedDescription("strThroughKeyDown")]
         KeyDown,
         [Helpers.LocalizedDescription("strThroughKeyUp")]
         KeyUp,
-        [Helpers.LocalizedDescription("strThroughBoth")]
-        Both,
+        [Helpers.LocalizedDescription("strNone")]
+        None,
     }
 
 
@@ -30,25 +30,42 @@ namespace SyncIMEStatus
     {
         [Helpers.LocalizedDescription("strDoNothing")]
         DoNothing,
+        [Helpers.LocalizedDescription("strDetect")]
+        Detect,
         [Helpers.LocalizedDescription("strImeOn")]
         ImeOn,
+        [Helpers.LocalizedDescription("strImeOnAndSend")]
+        ImeOnAndSend,
         [Helpers.LocalizedDescription("strImeOff")]
         ImeOff,
+        [Helpers.LocalizedDescription("strImeOffAndSend")]
+        ImeOffAndSend,
         [Helpers.LocalizedDescription("strToggle")]
         Toggle,
+        [Helpers.LocalizedDescription("strImeOffAndSend")]
+        ToggleAndSend,
     }
 
     [TypeConverter(typeof(Helpers.EnumDescriptionTypeConverter))]
     public enum TriggerKeyState
     {
-        [Helpers.LocalizedDescription("strDoNothing")]
-        DoNothing,
-        [Helpers.LocalizedDescription("strKeyDown")]
-        KeyDown,
         [Helpers.LocalizedDescription("strKeyUp")]
         KeyUp,
+        [Helpers.LocalizedDescription("strKeyDown")]
+        KeyDown,
         [Helpers.LocalizedDescription("strBoth")]
         Both,
+        [Helpers.LocalizedDescription("strDoNothing")]
+        DoNothing,
+    }
+
+    [TypeConverter(typeof(Helpers.EnumDescriptionTypeConverter))]
+    public enum SendMessageMode
+    {
+        [Helpers.LocalizedDescription("strDoNothing")]
+        DoNothing,
+        [Helpers.LocalizedDescription("strSend")]
+        Send
     }
 
     public class HookKeyCode : INotifyPropertyChanged
@@ -56,7 +73,7 @@ namespace SyncIMEStatus
         private int _keyCode;
         public int KeyCode { get { return _keyCode; } set { _keyCode = value; NotifyPropertyChanged(); } }
 
-        private ModifierKeys _modifiers;
+        private ModifierKeys _modifiers = ModifierKeys.None;
         public ModifierKeys Modifiers { get { return _modifiers; } set { _modifiers = value; NotifyPropertyChanged(); } }
         public ModifierKeys ModifiersAndAdd
         {
@@ -80,6 +97,9 @@ namespace SyncIMEStatus
 
         private ImeMode _imeMode;
         public ImeMode ImeMode { get { return _imeMode; } set { _imeMode = value; NotifyPropertyChanged(); } }
+
+        //private SendMessageMode _sendMessage;
+        //public SendMessageMode SendMessage { get { return _sendMessage; } set { _sendMessage = value; NotifyPropertyChanged(); } }
 
         private KeyPassThroughMode _passThroughMode;
         public KeyPassThroughMode PassThroughMode { get { return _passThroughMode; } set { _passThroughMode = value; NotifyPropertyChanged(); } }
@@ -107,19 +127,23 @@ namespace SyncIMEStatus
             }
         }
 
-        public HookKeyCode(int keyCode, ModifierKeys modKeys, KeyPassThroughMode passThroughMode = KeyPassThroughMode.None, ImeMode imeMode = ImeMode.DoNothing)
+        public HookKeyCode(int keyCode,
+                           ModifierKeys modKeys,
+                           KeyPassThroughMode passThroughMode = KeyPassThroughMode.Both,
+                           ImeMode imeMode = ImeMode.Detect,
+                           TriggerKeyState triggerState = TriggerKeyState.KeyUp)
         {
             KeyCode = keyCode;
             Modifiers = modKeys;
             ImeMode = imeMode;
             PassThroughMode = passThroughMode;
+            TriggerState = triggerState;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
 
 
         public int KeyProc(int keyCode, int keyStat)
@@ -179,41 +203,46 @@ namespace SyncIMEStatus
                 {
                     case ImeMode.DoNothing:
                         break;
+                    case ImeMode.Detect:
+                        if (GetFocusedWindowImeStat(out bool ie0))
+                        {
+                            SyncIme.Current.ImeStat = ie0;
+                            break;
+                        }
+                        break;
                     case ImeMode.ImeOn:
                         SyncIme.Current.ImeStat = true;
-                        if (GetFocusedWindowImeStat(out bool ie1) && ie1 == true)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            bool imeStat = true;
-                            SetFocusedWindowImeStat(imeStat);
-                            break;
-                        }
+                        break;
                     case ImeMode.ImeOff:
                         SyncIme.Current.ImeStat = false;
-                        if (GetFocusedWindowImeStat(out bool ie2) && ie2 == false)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            bool imeStat = false;
-                            SetFocusedWindowImeStat(imeStat);
-                            break;
-                        }
+                        break;
                     case ImeMode.Toggle:
-                        if (GetFocusedWindowImeStat(out bool ie3))
+                        if (GetFocusedWindowImeStat(out bool ie1))
                         {
-                            break;
+                            SyncIme.Current.ImeStat = ie1 ? false : true; //IME 状態切替
                         }
-                        else
+                        break;
+                    case ImeMode.ImeOnAndSend:
+                        SyncIme.Current.ImeStat = true;
+                        if (GetFocusedWindowImeStat(out bool ie2) && ie2 == true)
                         {
-                            bool imeStat = ie3 ? false : true; //IME 状態切替
-                            SetFocusedWindowImeStat(imeStat);
-                            break;
+                            SetFocusedWindowImeStat(true);
                         }
+                        break;
+                    case ImeMode.ImeOffAndSend:
+                        SyncIme.Current.ImeStat = false;
+                        if (GetFocusedWindowImeStat(out bool ie3) && ie3 != false)
+                        {
+                            SetFocusedWindowImeStat(false);
+                        }
+                        break;
+                    case ImeMode.ToggleAndSend:
+                        if (GetFocusedWindowImeStat(out bool ie4))
+                        {
+                            SyncIme.Current.ImeStat = ie4 ? false : true; //IME 状態切替
+                            SetFocusedWindowImeStat(SyncIme.Current.ImeStat);
+                        }
+                        break;
                 }
             }
 

@@ -85,6 +85,8 @@ namespace SyncIMEStatus
 
         public bool TryAddCustomKey(int keyCode, HookKeyCode.ModifierKeys modKeys)
         {
+            //重複設定の検出 → 別に重複してもいいからコメントアウト
+            /*
             var dupKey = CustomKeys
                 .Where(key => (key.KeyCode == keyCode && key.Modifiers == modKeys))
                 .FirstOrDefault();
@@ -94,6 +96,7 @@ namespace SyncIMEStatus
                 CustomKeysSelectedIndex = CustomKeys.IndexOf(dupKey);
                 return false;
             }
+            */
 
             HookKeyCode newKeyCode = new HookKeyCode(keyCode, modKeys);
             CustomKeys.Add(newKeyCode);

@@ -1,4 +1,48 @@
 {
   "KeyCodeList": [
+    {
+      "KeyCode": 243,
+      "Modifiers": 0,
+      "ModifiersAndAdd": 0,
+      "TriggerState": 0,
+      "ImeMode": 1,
+      "PassThroughMode": 0,
+      "ReplaceKey": 0,
+      "ReplaceModifiers": 0,
+      "ReplaceModifiersAndAdd": 0
+    },
+    {
+      "KeyCode": 244,
+      "Modifiers": 0,
+      "ModifiersAndAdd": 0,
+      "TriggerState": 0,
+      "ImeMode": 1,
+      "PassThroughMode": 0,
+      "ReplaceKey": 0,
+      "ReplaceModifiers": 0,
+      "ReplaceModifiersAndAdd": 0
+    },
+    {
+      "KeyCode": 29,
+      "Modifiers": 0,
+      "ModifiersAndAdd": 0,
+      "TriggerState": 0,
+      "ImeMode": 1,
+      "PassThroughMode": 0,
+      "ReplaceKey": 0,
+      "ReplaceModifiers": 0,
+      "ReplaceModifiersAndAdd": 0
+    },
+    {
+      "KeyCode": 28,
+      "Modifiers": 0,
+      "ModifiersAndAdd": 0,
+      "TriggerState": 0,
+      "ImeMode": 1,
+      "PassThroughMode": 0,
+      "ReplaceKey": 0,
+      "ReplaceModifiers": 0,
+      "ReplaceModifiersAndAdd": 0
+    }
   ]
 }

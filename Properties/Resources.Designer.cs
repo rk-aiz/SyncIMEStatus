@@ -80,6 +80,15 @@ namespace SyncIMEStatus.Properties {
         }
         
         /// <summary>
+        ///   Detect に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string strDetect {
+            get {
+                return ResourceManager.GetString("strDetect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   None に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string strDoNothing {
@@ -98,11 +107,29 @@ namespace SyncIMEStatus.Properties {
         }
         
         /// <summary>
+        ///   Ime Off (SendMessage) に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string strImeOffAndSend {
+            get {
+                return ResourceManager.GetString("strImeOffAndSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   IME On に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string strImeOn {
             get {
                 return ResourceManager.GetString("strImeOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ime On (SendMessage) に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string strImeOnAndSend {
+            get {
+                return ResourceManager.GetString("strImeOnAndSend", resourceCulture);
             }
         }
         
@@ -184,6 +211,15 @@ namespace SyncIMEStatus.Properties {
         public static string strToggle {
             get {
                 return ResourceManager.GetString("strToggle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Toggle (SendMessage) に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string strToggleAndSend {
+            get {
+                return ResourceManager.GetString("strToggleAndSend", resourceCulture);
             }
         }
     }

@@ -259,6 +259,7 @@ namespace SyncIMEStatus
 
             if (mode.HasFlag(SendInputMode.KeyDown))
             {
+                Debug.WriteLine($"KeyDown {key}");
                 Input iKeyDown = new Input { Type = 1 };// KeyBoard = 1
                 iKeyDown.ui.Keyboard.VirtualKey = (short)key;
                 iKeyDown.ui.Keyboard.ScanCode = (short)vsc;
@@ -270,6 +271,7 @@ namespace SyncIMEStatus
 
             if (mode.HasFlag(SendInputMode.KeyUp))
             {
+                Debug.WriteLine($"KeyUp {key}");
                 Input iKeyUp = new Input { Type = 1 };// KeyBoard = 1
                 iKeyUp.ui.Keyboard.VirtualKey = (short)key;
                 iKeyUp.ui.Keyboard.ScanCode = (short)vsc;

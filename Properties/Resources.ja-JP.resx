@@ -124,14 +124,26 @@
   <data name="strBoth" xml:space="preserve">
     <value>両方に反応する</value>
   </data>
+  <data name="strDetect" xml:space="preserve">
+    <value>IME状態取得</value>
+  </data>
   <data name="strDoNothing" xml:space="preserve">
     <value>何もしない</value>
   </data>
   <data name="strImeOff" xml:space="preserve">
     <value>IMEオフ</value>
   </data>
+  <data name="strImeOffAndSend" xml:space="preserve">
+    <value>IMEオフ(SendMessage)</value>
+  </data>
   <data name="strImeOn" xml:space="preserve">
     <value>IMEオン</value>
+  </data>
+  <data name="strImeOnAndSend" xml:space="preserve">
+    <value>IMEオン(SendMessage)</value>
+  </data>
+  <data name="strImeToggleAndSend" xml:space="preserve">
+    <value>切り替え(SendMessage)</value>
   </data>
   <data name="strKeyDown" xml:space="preserve">
     <value>KeyDownに反応する</value>

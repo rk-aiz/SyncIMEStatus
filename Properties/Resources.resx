@@ -124,14 +124,23 @@
   <data name="strBoth" xml:space="preserve">
     <value>React to Both</value>
   </data>
+  <data name="strDetect" xml:space="preserve">
+    <value>Detect</value>
+  </data>
   <data name="strDoNothing" xml:space="preserve">
     <value>None</value>
   </data>
   <data name="strImeOff" xml:space="preserve">
     <value>IME Off</value>
   </data>
+  <data name="strImeOffAndSend" xml:space="preserve">
+    <value>Ime Off (SendMessage)</value>
+  </data>
   <data name="strImeOn" xml:space="preserve">
     <value>IME On</value>
+  </data>
+  <data name="strImeOnAndSend" xml:space="preserve">
+    <value>Ime On (SendMessage)</value>
   </data>
   <data name="strKeyDown" xml:space="preserve">
     <value>React to KeyDown</value>
@@ -159,5 +168,8 @@
   </data>
   <data name="strToggle" xml:space="preserve">
     <value>Toggle</value>
+  </data>
+  <data name="strToggleAndSend" xml:space="preserve">
+    <value>Toggle (SendMessage)</value>
   </data>
 </root>
