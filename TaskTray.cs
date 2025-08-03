@@ -36,6 +36,22 @@ namespace SyncIMEStatus
                     _cMenu.SetLocation(rect.X, rect.Y);
                 Dispatcher.CurrentDispatcher.DoEvents(DispatcherPriority.ContextIdle);
             };
+
+        }
+
+        public void ChangeIcon(bool mode)
+        {
+            if (_notifyIcon == null) return;
+
+            // アイコンを変更
+            if (mode)
+            {
+                _notifyIcon.Icon = Properties.Resources.AppIcon;
+            }
+            else
+            {
+                _notifyIcon.Icon = Properties.Resources.GrayIcon;
+            }
         }
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
@@ -43,6 +59,10 @@ namespace SyncIMEStatus
             if (e.Button == MouseButtons.Right)
             {
                 ShowCMenuWindow();
+            }
+            if (e.Button == MouseButtons.Left)
+            {
+                // ←IME ON/OFF トグル機能かなんか追加するか
             }
         }
 

@@ -26,7 +26,11 @@ namespace SyncIMEStatus
         public bool ImeStat
         {
             get { return _imeStat; }
-            set { _imeStat = value; }
+            set
+            {
+                _imeStat = value;
+                TaskTray.Current.ChangeIcon(_imeStat);
+            }
         }
 
         private bool _hookEnabled = false;
@@ -99,6 +103,12 @@ namespace SyncIMEStatus
             {
                 return false;
             }
+
+            if (GetFocusedWindowImeStat(out bool imeStat))
+            {
+                SyncIme.Current.ImeStat = imeStat;
+            }
+            
             HookEnabled = true;
             return true;
         }

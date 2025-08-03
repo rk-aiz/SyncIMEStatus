@@ -139,10 +139,76 @@ namespace SyncIMEStatus
         public delegate IntPtr WindowsHookDelegate(int nCode, IntPtr wParam, IntPtr lParam);
         public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
 
+        // SetWindowImeStatViaContext 追加
+        [DllImport("imm32.dll")]
+        static extern IntPtr ImmGetContext(IntPtr hWnd);
+
+        [DllImport("imm32.dll")]
+        static extern bool ImmSetOpenStatus(IntPtr hIMC, bool bOpen);
+
+        [DllImport("imm32.dll")]
+        static extern bool ImmGetOpenStatus(IntPtr hIMC, out bool bOpen);
+
+        [DllImport("imm32.dll")]
+        static extern bool ImmReleaseContext(IntPtr hWnd, IntPtr hIMC);
+
+        public static bool SetWindowImeStatViaContext(IntPtr hWnd, bool open)
+        {
+            var hImc = ImmGetContext(hWnd);
+            if (hImc == IntPtr.Zero) return false;
+            var ok = ImmSetOpenStatus(hImc, open);
+            ImmReleaseContext(hWnd, hImc);
+            return ok;
+        }
+
+
+
+        //ひらがな／半角カナ／アルファベット混在など、変換モードまで制御したい場合は以下 API
+        [DllImport("imm32.dll")]
+        static extern bool ImmSetConversionStatus(IntPtr hIMC, int conversion, int sentence);
+
+        // 変換モード定数例
+        const int IME_CMODE_NATIVE = 0x0001; // かな
+        const int IME_CMODE_KATAKANA = 0x0002; // カタカナ
+        const int IME_CMODE_FULLSHAPE = 0x0008; // 全角
+        const int IME_CMODE_ROMAN = 0x0010; // ローマ字
+
+        // ひらがな全角ローマ字→
+        //var conversion = IME_CMODE_NATIVE | IME_CMODE_FULLSHAPE | IME_CMODE_ROMAN;
+        //ImmSetConversionStatus(hIMC, conversion, 0);
+
+        public static bool GetWindowImeStatViaContext(IntPtr hWnd, out bool imeStat)
+        {
+            imeStat = false;
+            // hWnd の簡易チェック
+            if (hWnd == IntPtr.Zero)
+                return false;
+
+            // IME コンテキスト取得
+            IntPtr hImc = ImmGetContext(hWnd);
+            if (hImc == IntPtr.Zero)
+                return false;
+
+            try
+            {
+                // IME開閉状態取得
+                if (!ImmGetOpenStatus(hImc, out imeStat))
+                    return false;
+
+                return true;
+            }
+            finally
+            {
+                // 必ずリリース
+                ImmReleaseContext(hWnd, hImc);
+            }
+        }
+
+
         public static bool GetWindowImeStat(IntPtr hWnd, out bool imeStat)
         {
             IntPtr imwd = ImmGetDefaultIMEWnd(hWnd);
-            if (imwd == null | imwd == IntPtr.Zero) { imeStat = false; return false; }
+            if (imwd == IntPtr.Zero) { imeStat = false; return false; }
             imeStat = SendMessage(imwd, WM_IME_CONTROL, IMC_GETOPENSTATUS, 0) != IntPtr.Zero;
             return true;
         }
@@ -150,7 +216,7 @@ namespace SyncIMEStatus
         public static bool SetWindowImeStat(IntPtr hWnd, bool imeStat)
         {
             IntPtr imwd = ImmGetDefaultIMEWnd(hWnd);
-            if (imwd == null | imwd == IntPtr.Zero) { return false; }
+            if (imwd == IntPtr.Zero) { return false; }
 
             SendMessage(imwd, WM_IME_CONTROL, IMC_SETOPENSTATUS, imeStat ? 1 : 0);
             return true;
@@ -160,7 +226,7 @@ namespace SyncIMEStatus
         {
             if (!GetFocusedWindow(out IntPtr hwndFocus)) { imeStat = false; return false; }
 
-            if (!GetWindowImeStat(hwndFocus, out imeStat)) { return false; }
+            if (!GetWindowImeStatViaContext(hwndFocus, out imeStat)) { return false; }
             return true;
         }
 
@@ -169,6 +235,16 @@ namespace SyncIMEStatus
             if (!GetFocusedWindow(out IntPtr hwndFocus)) { return false; }
 
             if (!SetWindowImeStat(hwndFocus, imeStat)) { return false; };
+
+            return true;
+        }
+
+        // ViaContext 追加
+        public static bool SetFocusedWindowImeStatViaContext(bool imeStat)
+        {
+            if (!GetFocusedWindow(out IntPtr hwndFocus)) { return false; }
+
+            if (!SetWindowImeStatViaContext(hwndFocus, imeStat)) { return false; }
 
             return true;
         }

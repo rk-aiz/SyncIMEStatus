@@ -226,21 +226,24 @@ namespace SyncIMEStatus
                         SyncIme.Current.ImeStat = true;
                         if (GetFocusedWindowImeStat(out bool ie2) && ie2 == true)
                         {
-                            SetFocusedWindowImeStat(true);
+                            //SetFocusedWindowImeStat(true);
+                            SetFocusedWindowImeStatViaContext(true);
                         }
                         break;
                     case ImeMode.ImeOffAndSend:
                         SyncIme.Current.ImeStat = false;
                         if (GetFocusedWindowImeStat(out bool ie3) && ie3 != false)
                         {
-                            SetFocusedWindowImeStat(false);
+                            //SetFocusedWindowImeStat(false);
+                            SetFocusedWindowImeStatViaContext(false);
                         }
                         break;
                     case ImeMode.ToggleAndSend:
                         if (GetFocusedWindowImeStat(out bool ie4))
                         {
                             SyncIme.Current.ImeStat = ie4 ? false : true; //IME 状態切替
-                            SetFocusedWindowImeStat(SyncIme.Current.ImeStat);
+                            //SetFocusedWindowImeStat(SyncIme.Current.ImeStat);
+                            SetFocusedWindowImeStatViaContext(SyncIme.Current.ImeStat);
                         }
                         break;
                 }
